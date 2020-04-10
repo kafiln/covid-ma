@@ -8,11 +8,12 @@ const {
   WEBSITE_URL,
   TEXT_NODE,
   DATE_FORMAT,
+  TIME_OFFSET,
   REGIONS_NODE,
 } = require('./config');
 
 const dateStringsToTime = (date, time) =>
-  moment(`${time} ${date}`, DATE_FORMAT).toString();
+  moment(`${time} ${date} ${TIME_OFFSET}`, DATE_FORMAT).toString();
 
 const desc = (a, b) => b.value - a.value;
 

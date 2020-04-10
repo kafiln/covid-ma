@@ -1,6 +1,6 @@
 {
   "name": "morocco-covid-stats",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A small utility to get the latest Covid-19 statistics in Morocco from the Official Website",
   "main": "index.js",
   "scripts": {
