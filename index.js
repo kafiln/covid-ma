@@ -65,7 +65,7 @@ const getAllData = async () => {
   const [regionsNode, countryNode] = await nodesFromUrl(WEBSITE_URL);
 
   return {
-    country: countryFromNode(countryNode),
+    ...countryFromNode(countryNode),
     regions: regionsFromNode(regionsNode),
   };
 };
