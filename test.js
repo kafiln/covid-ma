@@ -1,6 +1,8 @@
-const { all } = require('.');
+const getAllData = require('.');
 
 (async () => {
-  const results = await all();
+  console.time('duration');
+  const results = await getAllData();
   console.log(results);
+  console.timeEnd('duration');
 })();

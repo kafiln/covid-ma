@@ -13,7 +13,7 @@ const {
 } = require('./config');
 
 const dateStringsToTime = (date, time) =>
-  moment(`${time} ${date} ${TIME_OFFSET}`, DATE_FORMAT).toString();
+  moment(`${time} ${date} ${TIME_OFFSET}`, DATE_FORMAT).toISOString();
 
 const desc = (a, b) => b.value - a.value;
 
@@ -32,27 +32,10 @@ const regionsFromNode = (node) =>
     })
     .sort(desc);
 
-const valuesFromNode = (node) =>
-  innerText(node)
-    .replace(/\u{200b}/gu, '') // remove zero width space
-    .replace(/\s+/g, ' ') // replace white spaces with one ' '
-    .trim() // trimStart && trinEnd
-    .split(' ');
+const countryDto = (values) => {
+  const [time, date, recovered, deaths, confirmed, negatives] = values;
 
-const nodeFromUrlAndPath = async (url, path) => {
-  const document = await JSDOM.fromURL(url);
-  const node = document.window.document.querySelector(path);
-  if (!node) throw Error(ERROR_MESSAGE);
-  return node;
-};
-
-const globalData = async () => {
-  const tbody = await nodeFromUrlAndPath(WEBSITE_URL, TEXT_NODE);
-  const [time, date, recovered, deaths, confirmed, negatives] = valuesFromNode(
-    tbody
-  );
-
-  const result = {
+  return {
     lastUpdate: dateStringsToTime(date, time),
     recovered: parseInt(recovered),
     deaths: parseInt(deaths),
@@ -60,26 +43,31 @@ const globalData = async () => {
     negatives: parseInt(negatives),
     tested: parseInt(negatives) + parseInt(confirmed),
   };
-
-  return result;
 };
 
-const regionsData = async () => {
-  const trs = await nodeFromUrlAndPath(WEBSITE_URL, REGIONS_NODE);
-  return regionsFromNode(trs);
+const countryFromNode = (node) =>
+  countryDto(
+    innerText(node)
+      .replace(/\u{200b}/gu, '') // remove zero width space
+      .replace(/\s+/g, ' ') // replace white spaces with one ' '
+      .trim() // trimStart && trinEnd
+      .split(' ')
+  );
+
+const nodesFromUrl = async (url) => {
+  const document = await JSDOM.fromURL(url);
+  const country = document.window.document.querySelector(TEXT_NODE);
+  const regions = document.window.document.querySelector(REGIONS_NODE);
+  return [regions, country];
 };
 
-all = async () => {
-  const [regions, global] = await Promise.all([regionsData(), globalData()]);
+const getAllData = async () => {
+  const [regionsNode, countryNode] = await nodesFromUrl(WEBSITE_URL);
 
   return {
-    ...global,
-    regions,
+    country: countryFromNode(countryNode),
+    regions: regionsFromNode(regionsNode),
   };
 };
 
-module.exports = {
-  regions: regionsData,
-  global: globalData,
-  all: all,
-};
+module.exports = getAllData;
