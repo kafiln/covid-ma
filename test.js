@@ -1,6 +1,6 @@
-const getResults = require('.');
+const { all } = require('.');
 
 (async () => {
-  const results = await getResults();
+  const results = await all();
   console.log(results);
 })();

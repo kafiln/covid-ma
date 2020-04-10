@@ -1,11 +1,11 @@
 {
   "name": "morocco-covid-stats",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.2.0",
+  "description": "A small utility to get the latest Covid-19 statistics in Morocco from the Official Website",
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "dev": "nodemon index"
+    "dev": "nodemon test.js"
   },
   "keywords": [],
   "author": "Kafil Nasdami",
