@@ -1,6 +1,6 @@
 module.exports = {
   ERROR_MESSAGE: 'Invalid node path',
-  DATE_FORMAT: 'hhmm DD-MM-YYYY',
+  DATE_FORMAT: 'hhmm DD-MM-YYYY Z',
   TIME_OFFSET: '+0100',
   WEBSITE_URL: 'http://www.covidmaroc.ma/pages/Accueil.aspx',
   TEXT_NODE:

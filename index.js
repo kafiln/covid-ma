@@ -1,21 +1,11 @@
 // External dependencies
 const { JSDOM } = require('jsdom');
-const moment = require('moment');
 const innerText = require('styleless-innertext');
 
+const { dateStringsToTime, byRegionNameDesc } = require('./utils');
+
 // Config consts
-const {
-  WEBSITE_URL,
-  TEXT_NODE,
-  DATE_FORMAT,
-  TIME_OFFSET,
-  REGIONS_NODE,
-} = require('./config');
-
-const dateStringsToTime = (date, time) =>
-  moment(`${time} ${date} ${TIME_OFFSET}`, DATE_FORMAT).toISOString();
-
-const desc = (a, b) => b.value - a.value;
+const { WEBSITE_URL, TEXT_NODE, REGIONS_NODE } = require('./config');
 
 const regionsFromNode = (node) =>
   Array.from(node.children)
@@ -30,7 +20,7 @@ const regionsFromNode = (node) =>
         value: parseInt(word.match(/(\d)+/)[0]),
       };
     })
-    .sort(desc);
+    .sort(byRegionNameDesc);
 
 const countryDto = (values) => {
   const [time, date, recovered, deaths, confirmed, negatives] = values;
