@@ -1,6 +1,6 @@
 {
   "name": "covid-ma",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A small utility to get the latest Covid-19 statistics in Morocco from the Official Website",
   "main": "index.js",
   "homepage": "https://kafiil.github.io/covid-ma/",
@@ -9,6 +9,11 @@
     "test:watch": "jest --watch",
     "dev": "nodemon demo.js"
   },
+  "files": [
+    "index.js",
+    "config.js",
+    "utils.js"
+  ],
   "keywords": [
     "covid-19",
     "morocco",
