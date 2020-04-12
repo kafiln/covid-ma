@@ -1,4 +1,6 @@
-const moment = require('moment');
+const dayjs = require('dayjs');
+dayjs.extend(require('dayjs/plugin/customParseFormat'));
+
 const { DATE_FORMAT, TIME_OFFSET } = require('./config');
 /**
  *Parse the strings for date and time
@@ -9,7 +11,7 @@ const { DATE_FORMAT, TIME_OFFSET } = require('./config');
  * @returns {Date} Date - The resulting date object
  */
 const dateStringsToTime = (date, time, timeOffset = TIME_OFFSET) =>
-  moment.utc(`${time} ${date} ${timeOffset}`, DATE_FORMAT).toISOString();
+  dayjs(`${time} ${date} ${timeOffset}`, DATE_FORMAT).toDate().toISOString();
 
 const byRegionNameDesc = (region, anotherRegion) =>
   anotherRegion.value - region.value;
