@@ -9,7 +9,7 @@ const { WEBSITE_URL, TEXT_NODE, REGIONS_NODE } = require('./config');
 
 const regionsFromNode = (node) =>
   Array.from(node.children)
-    .splice(2) // remove the headers
+    .splice(1) // remove the headers
     .map((e) => {
       const word = innerText(e)
         .replace(/\u{200b}/gu, '')
