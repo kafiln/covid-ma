@@ -4,7 +4,9 @@ const getData = require('.');
 (async () => {
   // get the results
   try {
-    const results = await getData();
+    const results = await getData({
+      timeOffset: '+0000',
+    });
     console.log(results);
   } catch (error) {
     console.error(error);

@@ -5,7 +5,7 @@ const innerText = require('styleless-innertext');
 const { dateStringsToTime, byRegionNameDesc } = require('./utils');
 
 // Config consts
-const { WEBSITE_URL, TEXT_NODE, REGIONS_NODE } = require('./config');
+const DEFAULT_CONFIG = require('./config');
 
 const regionsFromNode = (node) =>
   Array.from(node.children)
@@ -22,41 +22,45 @@ const regionsFromNode = (node) =>
     })
     .sort(byRegionNameDesc);
 
-const countryDto = (values) => {
+const countryDto = (values, config) => {
   const [time, date, recovered, deaths, confirmed, negatives] = values;
 
   return {
-    lastUpdate: dateStringsToTime(date, time),
+    lastUpdate: dateStringsToTime(date, time, config),
     recovered: parseInt(recovered),
     deaths: parseInt(deaths),
     confirmed: parseInt(confirmed),
     negatives: parseInt(negatives),
     tested: parseInt(negatives) + parseInt(confirmed),
+    actives: parseInt(confirmed) - parseInt(deaths) - parseInt(recovered),
   };
 };
 
-const countryFromNode = (node) =>
+const countryFromNode = (node, config) =>
   countryDto(
     innerText(node)
       .replace(/\u{200b}/gu, '') // remove zero width space
       .replace(/\s+/g, ' ') // replace white spaces with one ' '
       .trim() // trimStart && trinEnd
-      .split(' ')
+      .split(' '),
+    config
   );
 
-const nodesFromUrl = async (url) => {
-  const document = await JSDOM.fromURL(url);
-  const country = document.window.document.querySelector(TEXT_NODE);
-  const regions = document.window.document.querySelector(REGIONS_NODE);
+const nodesFromUrl = async (config) => {
+  const document = await JSDOM.fromURL(config.websiteUrl);
+  const country = document.window.document.querySelector(config.textNode);
+  const regions = document.window.document.querySelector(config.regionsNode);
   return [regions, country];
 };
 
-const getAllData = async () => {
-  const [regionsNode, countryNode] = await nodesFromUrl(WEBSITE_URL);
+const getAllData = async (options) => {
+  // Provided config overrides the default one
+  const config = { ...DEFAULT_CONFIG, ...options };
+  const [regionsNode, countryNode] = await nodesFromUrl(config);
 
   return {
-    ...countryFromNode(countryNode),
-    regions: regionsFromNode(regionsNode),
+    ...countryFromNode(countryNode, config),
+    regions: regionsFromNode(regionsNode, config),
   };
 };
 
