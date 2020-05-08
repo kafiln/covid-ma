@@ -7,7 +7,7 @@ const { dateStringsToTime, byRegionNameDesc } = require('./utils');
 // Config consts
 const DEFAULT_CONFIG = require('./config');
 
-const regionsFromNode = (node) =>
+const regionsFromNode = (node, totalValue) =>
   Array.from(node.children)
     .splice(1) // remove the headers
     .map((e) => {
@@ -18,11 +18,14 @@ const regionsFromNode = (node) =>
         .replace(/\s+/g, ' ');
 
       const numberRegex = /(\d)*\.?(\d)+/;
-      console.log(word);
+      const name = word.match(/(\D)*/)[0].trim();
+      const pourcentage = parseFloat(word.match(numberRegex)[0]);
+      value = Math.round((pourcentage * totalValue) / 100);
 
       return {
-        name: word.match(/(\D)*/)[0].trim(),
-        value: parseFloat(word.match(numberRegex)[0]),
+        name,
+        pourcentage,
+        value,
       };
     })
     .sort(byRegionNameDesc);
@@ -63,9 +66,11 @@ const getAllData = async (options) => {
   const config = { ...DEFAULT_CONFIG, ...options };
   const [regionsNode, countryNode] = await nodesFromUrl(config);
 
+  const country = countryFromNode(countryNode, config);
+
   return {
-    ...countryFromNode(countryNode, config),
-    regions: regionsFromNode(regionsNode, config),
+    ...country,
+    regions: regionsFromNode(regionsNode, country.confirmed),
   };
 };
 
