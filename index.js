@@ -11,13 +11,18 @@ const regionsFromNode = (node) =>
   Array.from(node.children)
     .splice(1) // remove the headers
     .map((e) => {
+      // console.log(innerText(e));
       const word = innerText(e)
         .replace(/\u{200b}/gu, '')
+        .replace(/,/, '.')
         .replace(/\s+/g, ' ');
+
+      const numberRegex = /(\d)*\.?(\d)+/;
+      console.log(word);
 
       return {
         name: word.match(/(\D)*/)[0].trim(),
-        value: parseInt(word.match(/(\d)+/)[0]),
+        value: parseFloat(word.match(numberRegex)[0]),
       };
     })
     .sort(byRegionNameDesc);
