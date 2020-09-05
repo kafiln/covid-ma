@@ -70,7 +70,7 @@ const getAllData = async (options) => {
 
   return {
     ...country,
-    regions: regionsFromNode(regionsNode, country.confirmed),
+    // regions: regionsFromNode(regionsNode, country.confirmed),
   };
 };
 

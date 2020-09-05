@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to covid-ma 👋  </h1>
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.1.1-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.2.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/Kafiil/covid-ma/blob/master/README.md" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
